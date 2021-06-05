@@ -54,7 +54,7 @@ for x in db['Prosit'].find():
     else:
         hours = 17
         if minuts > 59:
-            minuts,hours = convert(17,minuts)
+            data = convert(17,minuts)
 
             date = datetime.datetime(2020, 1, int(date_number), data[1], data[0])
             print(date)
