@@ -39,6 +39,15 @@ def checksuper_than_0(list):
     return counter
 
 
+def Draw_graph(graph):
+    G = nx.from_numpy_matrix(np.matrix(graph), create_using=nx.DiGraph)
+    layout = nx.spring_layout(G)
+    nx.draw(G, layout)
+    nx.draw_networkx_edge_labels(G, pos=layout)
+    plt.show()
+
+
+
 
 def save_to_mongo(n,graph):
     sommet = dict()
@@ -56,7 +65,7 @@ def save_to_mongo(n,graph):
 
 
     print("sommet",sommet)
-    # new_db["Data_analysis"].insert_one(sommet)
+    new_db["Data_analysis"].insert_one(sommet)
 
     return
 
@@ -83,17 +92,13 @@ for x in range(n):
                     degr_parcour = degre
 
 
+Draw_graph(graph)
 
-save_to_mongo(n,graph)
+
+#save_to_mongo(n,graph)
 print(point)
 print(graph)
 
 
 
 
-
-G = nx.from_numpy_matrix(np.matrix(graph), create_using=nx.DiGraph)
-layout = nx.spring_layout(G)
-nx.draw(G, layout)
-nx.draw_networkx_edge_labels(G, pos=layout)
-plt.show()
