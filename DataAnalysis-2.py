@@ -93,13 +93,14 @@ def Create_graph(n):
     for x in range(n):
         degre = random.randint(degreMin, degreMax)
         degr_parcour = degre
-        degr_parcour = degr_parcour - sum(graph[x])
+        degr_parcour = degr_parcour - checksuper_than_0(graph[x])
         for y1 in range(n):
                         if (degr_parcour > 0 ):
 
                             if (x != y1):
-                             graph[x][y1] = 1
-                             graph[y1][x] = 1
+                             val = calculate_distance(point[x][0],point[y1][0],point[x][1],point[y1][1])
+                             graph[x][y1] = val
+                             graph[y1][x] = val
                              degr_parcour = degr_parcour - 1
 
 
