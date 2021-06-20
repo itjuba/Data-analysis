@@ -1,5 +1,7 @@
 import math
 import random
+from pprint import pprint
+
 import networkx as nx
 import numpy as np
 import matplotlib.pyplot as plt
@@ -19,7 +21,7 @@ def generate_vertex(n):
 
 
 
-n= 10
+n= 6
 degreMax = n - 1
 degreMin = math.ceil(n / 2)
 
@@ -29,7 +31,6 @@ point = generate_vertex(n)
 def calculate_distance(x1,x2,y1,y2):
     return round(math.sqrt((x2-x1)**2 + (y2-y1)**2),4)
 
-print(point)
 
 def checksuper_than_0(list):
     counter = 0
@@ -40,11 +41,26 @@ def checksuper_than_0(list):
 
 
 def Draw_graph(graph):
-    G = nx.from_numpy_matrix(np.matrix(graph), create_using=nx.DiGraph)
-    layout = nx.spring_layout(G)
-    nx.draw(G, layout)
-    nx.draw_networkx_edge_labels(G, pos=layout)
+    x = list()
+    y = list()
+    for i in point:
+        x.append(i[0])
+        y.append(i[1])
+    # print("yanis ", x, y)
+    # plt.plot(x,y,"ro")
+    # for i in range(n):
+    #     for j in range(n):
+    #         if(graph[i][j]!=0):
+    #             plt.plot([x[i],x[j]],[y[i],y[j]])
+    # plt.show()
+
+    G = nx.from_numpy_matrix(np.array(graph))
+    nx.draw(G, with_labels=True)
     plt.show()
+
+
+
+
 
 
 
@@ -57,47 +73,43 @@ def save_to_mongo(n,graph):
     for i in  range(n):
         object = dict()
         for z in range(n):
-            print(graph[i][z])
-            object["city" + str(z)] =  {"distance" : graph[i][z], "x":point[z][0],"y":point[z][1] }
+            if z == i:
+                continue
+            # print(graph[i][z])
+            object["city" + str(i) + " => " + "city"+str(z)] =  {"distance" : graph[i][z], "x":point[z][0],"y":point[z][1] }
 
         sommet[str("city" + str(i))] = object
 
 
 
-    print("sommet",sommet)
+    # print("sommet",sommet)
     new_db["Data_analysis"].insert_one(sommet)
 
     return
 
 
 
-
-for x in range(n):
+def Create_graph(n):
+    for x in range(n):
+        degre = random.randint(degreMin, degreMax)
+        degr_parcour = degre
+        degr_parcour = degr_parcour - sum(graph[x])
         for y1 in range(n):
-                    degre = random.randint(degreMin, degreMax)
-                    degr_parcour = degre
+                        if (degr_parcour > 0 ):
 
-                    while (degr_parcour > 0 ):
-
-                        if (x != y1):
-                         graph[x][y1] = calculate_distance(point[x][0],point[y1][0],point[x][1],point[y1][1])
-                         # graph[x][y1] = 1
-
-                        else :
-                            graph[x][y1] = 0
-                        degr_parcour = degr_parcour - 1
-
-                        if (checksuper_than_0(graph[y1]) > degre ):
-                            graph[y1][x] = 0
-                    degr_parcour = degre
+                            if (x != y1):
+                             graph[x][y1] = 1
+                             graph[y1][x] = 1
+                             degr_parcour = degr_parcour - 1
 
 
-Draw_graph(graph)
+    return graph
 
 
-#save_to_mongo(n,graph)
+pprint((Draw_graph(Create_graph(n))))
 print(point)
-print(graph)
+pprint(graph)
+save_to_mongo(n,graph)
 
 
 
