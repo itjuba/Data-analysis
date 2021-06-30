@@ -233,7 +233,7 @@ def generate_lot_of_solution(iterations):
 
 
 best_solution,distance = generate_lot_of_solution(100)
-print("Meilleurs solution global & distance in all iteration",best_solution,distance)
+print("Meilleur solution global & distance in all iteration",best_solution,distance)
 
 
 
